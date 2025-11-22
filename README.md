@@ -91,6 +91,37 @@ PORT_MAP = {
     "WEB_ACCESS": "80/443"
 }
 ```
+Pour OPNSense c'est un peu particulier. Par exemple dans pfSense quand une règle est à destination de tous les réseaux, il est indiqué "destination: Any". Avec OPNSense cela sera :
+```
+Destination:
+  any: 1
+```
+
+J'ai donc déclaré dans config.py `"1" : "Any"` afin de renseigner *Any* dans la source et la destination sur le flux graphique.
+
+```python
+# --- TABLE DE CORRESPONDANCE POUR LES INTERFACES ---
+INTERFACE_MAP = {
+    "wan": "WAN",
+    "lan": "LAN",
+    "opt1": "DMZ01",
+    "(self)": "All interfaces",
+    "(em0)": "WAN",
+    "1": "Any",
+    "<sshlockout>": "IP bannies après trop de tentatives SSH/Console Web",
+    "<virusprot>": "IP bannies après comportement suspect"
+}
+
+# --- TABLE DE CORRESPONDANCE POUR LES RESEAUX ---
+NET_MAP = {
+    "wan": "WAN SUBNET",
+    "lan": "LAN SUBNET",
+    "opt1": "DMZ01 SUBNET",
+    "(self)": "All interfaces",
+    "1": "Any"
+}
+(...)
+```
 
 ## 🚀 Utilisation
 
