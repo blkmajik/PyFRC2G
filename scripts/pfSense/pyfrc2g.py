@@ -292,3 +292,6 @@ if entries:
         logging.info("Pas de règles crées ou modifiées")
 else:
     logging.info("Le script n'a récupéré aucune règle firewall")
+
+if os.path.exists(FICHIER_CSV):
+    os.remove(FICHIER_CSV)
