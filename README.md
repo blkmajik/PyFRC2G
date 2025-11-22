@@ -38,31 +38,32 @@ Une fois le paquet **pfSense REST API** installé, configurez la ou les interfac
 
 3. Configuration du script
 
-Récupérez les fichiers **pyfrc2g.py** et **config.py**.
+Récupérez les fichiers **pyfrc2g.py** et **config.py** correspondant à votre passerelle (pfSense ou OPNSense).
 
-Configurez l'**URL** de votre pfSense et vos **credentials** dans le fichier **pyfrc2g.py**.
+Configurez l'**URL** de votre passerelle et vos **credentials** dans le fichier **pyfrc2g.py**.
 
-Exemple :
+Exemple avec pfSense :
 ```python
 # --- CONFIG ---
 PFS_URL = "https://pfs01.domaine.lan/api/v2/firewall/rules"
 PFS_TOKEN = "VOTRE_CLE_GENEREE_AVEC_PFSENSE_REST_API"
+PASSERELLE = "PFS01"
 ```
+Pour OPNSense vous devez également renseigner le nom des interfaces car l'API ne permet de récupérer les règles qu'interface par interfac (elles sont visibles sur *Interfaces > Assignations*)
 
-Renseignez le nom de la passerelle à la ligne 171 du script :
-```Python
+Exemple avec OPNSense :
+```python
+OPNS_URL = "https://<OPNS_ADDRESS/api/firewall/filter/search_rule"
+OPNS_SECRET = "<API_SECRET>"
+OPNS_KEY = "<API_KEY>"
+PASSERELLE = "<GW_NAME>"
 (...)
-    for entry in entries:
-        writer.writerow({
-            "SOURCE": safe_value(entry.get("source"), "source"),
-            "PASSERELLE": "NOM_DE_LA_PASSERELLE/"+safe_value(entry.get("interface"), "interface"),
-            "ACTION": safe_value(entry.get("type")),
-(...)
+# Déclaration des interfaces présentes sur OPNSense
+INTERFACES = ["wan","lan","opt1"]
 ```
+Configurez ensuite vos interfaces, les réseaux, les adresses des interfaces et les ports dans le fichier **config.py**.
 
-Configurez ensuite vos interfaces, les réseaux, les adresses des interfaces et les ports dans le fichier **config.py**. C'est certainement récupérable depuis pfSense mais je suis allé au plus facile à mettre en place 😇.
-
-Exemple :
+Exemple avec pfSense :
 ```python
 INTERFACE_MAP = {
     "wan": "WAN",
