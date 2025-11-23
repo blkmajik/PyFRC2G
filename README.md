@@ -147,7 +147,7 @@ CISO_EVIDENCE = f"{CISO_URL}/api/evidences/<EVIDENCE_ID>/upload/"
 3. Remarques
 * Lors de la récupération des hôtes de destination, l'API de pfSense ne permet pas de connaitre le réseau dans lequel se situe celui-ci. J'ai donc commenté mes hôtes de destination sur pfSense en renseignant dans quel VLAN était celui-ci.
 * Pour les hôtes de destination se situant en dehors de mon infrastructure interne, j'ai renseigné dans pfSense *EXT_* devant chaque nom d'alias de ces hôtes.
-* OPNSense expose à travers son API les règles de manière complètement différente de celle de pfSense. À ce jour je n'ai pas trouvé comment récupérer les règles désactivées. Les règles flottantes auto-générée ne sont également pas simples à récupérer.
+* OPNSense expose à travers son API les règles de manière complètement différente de celle de pfSense. À ce jour je n'ai pas trouvé comment récupérer les règles désactivées. Les règles flottantes auto-générées ne sont également pas simples à récupérer.
 
 ## 📝 Todo
 * Améliorer le code (je ne suis pas dev et ça se voit sur le côté bordélique).
