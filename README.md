@@ -155,5 +155,5 @@ CISO_EVIDENCE = f"{CISO_URL}/api/evidences/<EVIDENCE_ID>/upload/"
 * Notification des admins quand génération des graphiques.
 * Insérer le VLAN de destination devant un hôte de destination.
 * ~~Faire la même chose avec OPNSense~~.
-* (en cours) Envoyez les preuves dans [CISO Assistant](https://intuitem.com/fr/ciso-assistant/).
+* ~~Envoyez les preuves dans [CISO Assistant](https://intuitem.com/fr/ciso-assistant/)~~.
 * Reprendre les horodatages sur la création/modification des règles ainsi que l'auteur.
