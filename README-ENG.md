@@ -98,7 +98,7 @@ PORT_MAP = {
 ```
 
 For OPNSense, things work a bit differently. For example, in pfSense, when a rule is destined for all networks, it is shown as "destination: Any". In OPNSense it appears as:
-```json
+```
 Destination:
   any: 1
 ```
