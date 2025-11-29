@@ -40,7 +40,7 @@ Une fois le paquet **pfSense REST API** installé, configurez la ou les interfac
 
 3. Configuration du script
 
-Récupérez les fichiers **pyfrc2g.py** et **config.py** correspondant à votre passerelle (pfSense ou OPNSense).
+Récupérez les fichiers **pyfrc2g.py**, **config.py** et **md5sum.txt** correspondant à votre passerelle (pfSense ou OPNSense).
 
 Configurez l'**URL** de votre passerelle et vos **credentials** dans le fichier **pyfrc2g.py**.
 
