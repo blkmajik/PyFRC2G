@@ -80,9 +80,12 @@ def map_value(value, field=None, any_value="Any"):
         if val in API_PORT_MAP:
             return API_PORT_MAP[val]
     
-    # Destination mapping (networks and addresses)
+    # Destination mapping (networks, addresses, and interfaces)
     if field == "destination":
         val = str(value).lower()
+        # Check interface map first (interfaces can be used as destinations)
+        if val in API_INTERFACE_MAP:
+            return API_INTERFACE_MAP[val]
         if val in API_NET_MAP:
             return API_NET_MAP[val]
         if val in API_ADDRESS_MAP:

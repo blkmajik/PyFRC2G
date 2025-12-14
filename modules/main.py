@@ -7,11 +7,12 @@ import csv
 import glob
 import logging
 import sys
-from pyfrc2g.config import Config
-from pyfrc2g.api_client import APIClient
-from pyfrc2g.graph_generator import GraphGenerator
-from pyfrc2g.ciso_client import CISOCClient
-from pyfrc2g.utils import calculate_md5, map_value, normalize_ports
+import shutil
+from modules.config import Config
+from modules.api_client import APIClient
+from modules.graph_generator import GraphGenerator
+from modules.ciso_client import CISOCClient
+from modules.utils import calculate_md5, map_value, normalize_ports
 
 
 def main():
@@ -128,21 +129,30 @@ def main():
             f.write(f"{actual_md5}\n")
         logging.info("Changes detected, generating graphs...")
         
-        # Generate global file
-        logging.info("Generating global file (all interfaces)...")
+        # Create global CSV file (copy of all rules)
+        os.makedirs(config.graph_output_dir, exist_ok=True)
+        host_name = os.path.basename(config.graph_output_dir) if os.path.basename(config.graph_output_dir) else "gateway"
+        global_csv = os.path.join(config.graph_output_dir, f"{host_name}_ALL_flows.csv")
+        shutil.copy2(config.csv_file, global_csv)
+        logging.info(f"✓ Global CSV created: {global_csv}")
+        
+        # Generate global file (all interfaces together)
+        logging.info("Generating global graph (all interfaces combined)...")
         graph_generator.generate_graphs(config.csv_file, config.graph_output_dir)
         
-        # Generate per-interface files
-        logging.info("Generating per-interface files...")
+        # Generate per-interface files (separate graphs for each interface)
+        logging.info("Generating per-interface graphs (separate files for each interface)...")
         graph_generator.generate_by_interface(config.csv_file, config.graph_output_dir)
         
-        # Cleanup PNG files
+        # Cleanup PNG files (after PDFs are generated)
         try:
             png_files = glob.glob(os.path.join(config.graph_output_dir, "*.png"))
             for png in png_files:
                 if os.path.exists(png):
                     os.remove(png)
-                    logging.info(f"✓ PNG deleted: {png}")
+                    logging.debug(f"✓ PNG deleted: {png}")
+            if png_files:
+                logging.info(f"✓ Cleaned up {len(png_files)} temporary PNG file(s)")
         except Exception as e:
             logging.warning(f"Could not delete some PNG files: {e}")
         

@@ -6,11 +6,11 @@ A modular Python package for converting pfSense and OPNSense firewall rules into
 __version__ = "2.0.0"
 __author__ = "PyFRC2G Contributors"
 
-from pyfrc2g.config import Config
-from pyfrc2g.api_client import APIClient
-from pyfrc2g.graph_generator import GraphGenerator
-from pyfrc2g.ciso_client import CISOCClient
-from pyfrc2g.utils import calculate_md5, extract_base_url, normalize_ports, safe_filename, map_value
+from modules.config import Config
+from modules.api_client import APIClient
+from modules.graph_generator import GraphGenerator
+from modules.ciso_client import CISOCClient
+from modules.utils import calculate_md5, extract_base_url, normalize_ports, safe_filename, map_value
 
 __all__ = [
     'Config',

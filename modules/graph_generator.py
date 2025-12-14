@@ -8,8 +8,8 @@ import csv
 import logging
 from collections import OrderedDict
 from graphviz import Digraph
-from pyfrc2g.utils import normalize_ports, safe_filename, map_value, format_alias_label
-from pyfrc2g.config import FLOATING_RULES_LABELS, UNKNOWN_LABEL, DISABLED_LABEL, ANY_VALUE
+from modules.utils import normalize_ports, safe_filename, map_value, format_alias_label
+from modules.config import FLOATING_RULES_LABELS, UNKNOWN_LABEL, DISABLED_LABEL, ANY_VALUE
 
 
 class GraphGenerator:
@@ -247,7 +247,10 @@ class GraphGenerator:
                 c.showPage()
             
             c.save()
-            logging.info(f"✓ PDF generated: {pdf_path}")
+            if interface_filter:
+                logging.info(f"✓ PDF generated: {pdf_path} (interface: {interface_filter}, {len(png_files)} page(s))")
+            else:
+                logging.info(f"✓ Global PDF generated: {pdf_path} (all interfaces, {len(png_files)} page(s))")
             
         except Exception as e:
             logging.error(f"Error generating PDF: {e}")

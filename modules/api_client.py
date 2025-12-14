@@ -7,7 +7,7 @@ import urllib3
 import logging
 import traceback
 from requests.exceptions import RequestException, Timeout, ConnectionError, HTTPError
-from pyfrc2g.utils import extract_base_url, update_api_maps
+from modules.utils import extract_base_url, update_api_maps
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -203,7 +203,6 @@ class APIClient:
             timeout=10, 
             operation="fetching pfSense interfaces"
         )
-        
         if response:
             try:
                 data = response.json()
@@ -216,12 +215,18 @@ class APIClient:
                 for iface in interfaces:
                     if not isinstance(iface, dict):
                         continue
-                    # Use 'id' field (wan, lan, opt1, etc.) instead of 'if' (em0, em1, etc.)
+                    # Use 'id' field (wan, lan, opt1, etc.) as key, 'descr' (description) as value
                     identifier = iface.get("id", "")
-                    descr = iface.get("descr", "")
+                    descr = iface.get("descr", "").strip()
                     if identifier:
                         identifier_lower = identifier.lower()
-                        self.interface_map[identifier_lower] = descr or identifier.upper()
+                        # Always use descr if available, fallback to identifier.upper() only if descr is empty
+                        if descr:
+                            self.interface_map[identifier_lower] = descr
+                            logging.debug(f"Mapped interface: {identifier_lower} -> {descr}")
+                        else:
+                            self.interface_map[identifier_lower] = identifier.upper()
+                            logging.debug(f"Mapped interface (no descr): {identifier_lower} -> {identifier.upper()}")
                 
                 logging.info(f"✓ Retrieved {len(interfaces)} interfaces from pfSense API")
             except (ValueError, KeyError, TypeError) as e:
@@ -351,15 +356,26 @@ class APIClient:
                 for row in rows:
                     if isinstance(row, dict):
                         identifier = row.get("identifier", "").lower()
-                        description = row.get("description", "") or row.get("descr", "")
+                        # Get description from row (OPNSense API structure)
+                        description = row.get("description", "").strip()
+                        # Fallback to config.descr if description is empty
+                        if not description:
+                            config = row.get("config", {})
+                            if isinstance(config, dict):
+                                description = config.get("descr", "").strip()
                         enabled = row.get("enabled", False)
                         
                         # Skip system interfaces and disabled interfaces
                         if (identifier and 
                             identifier not in ["lo0", "enc0", "pflog0", ""] and
                             enabled):
-                            self.interface_map[identifier] = description if description else identifier.upper()
-                            logging.debug(f"Mapped interface: {identifier} -> {description or identifier.upper()}")
+                            # Always use description if available, fallback to identifier.upper() only if description is empty
+                            if description:
+                                self.interface_map[identifier] = description
+                                logging.debug(f"Mapped interface: {identifier} -> {description}")
+                            else:
+                                self.interface_map[identifier] = identifier.upper()
+                                logging.debug(f"Mapped interface (no description): {identifier} -> {identifier.upper()}")
                 
                 logging.info(f"✓ Retrieved {len(self.interface_map)} interfaces from OPNSense API")
             except (ValueError, KeyError, TypeError) as e:
