@@ -46,7 +46,7 @@ class CISOCClient:
         if not self.enabled:
             logging.debug("CISO Assistant not configured or disabled")
         else:
-            logging.debug(f"CISO Assistant configured: URL={self.ciso_url}, Evidence URL={self.ciso_evidence_url}")
+            logging.debug(f"CISO Assistant configured: URL={self.ciso_url}, Evidence URL={self.ciso_evidence_path}")
     
     def upload_pdf(self, pdf_path):
         """
@@ -89,7 +89,7 @@ class CISOCClient:
                 
                 # Make the upload request
                 response = requests.post(
-                    self.ciso_evidence_url,
+                    self.ciso_evidence_path,
                     files=files,
                     data=data,
                     headers=headers,
