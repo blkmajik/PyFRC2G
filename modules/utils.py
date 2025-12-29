@@ -83,7 +83,30 @@ def map_value(value, field=None, any_value="Any"):
     # Destination mapping (networks, addresses, and interfaces)
     if field == "destination":
         val = str(value).lower()
-        # Check interface map first (interfaces can be used as destinations)
+        # Check for gateway address pattern (interface:ip or interfaceip) - e.g., "lan:ip", "opt1:ip", "lanip", "opt1ip"
+        # This should map to "{Interface Description} Address" instead of just the interface name
+        interface_name = None
+        if ':' in val and val.endswith(':ip'):
+            # Pattern: "lan:ip" -> extract "lan"
+            interface_name = val.rsplit(':', 1)[0]
+        elif val.endswith('ip') and len(val) > 2:
+            # Pattern: "lanip", "opt1ip", "wanip" -> extract interface name (remove "ip" suffix)
+            # Try to match known interface patterns
+            potential_interface = val[:-2]  # Remove "ip" suffix
+            # Check if it's a known interface (wan, lan, or optX)
+            if potential_interface in API_INTERFACE_MAP:
+                interface_name = potential_interface
+            # Also try matching opt1, opt2, etc. patterns
+            elif potential_interface.startswith('opt') and potential_interface[3:].isdigit():
+                # For opt1ip, opt2ip, etc.
+                interface_name = potential_interface
+        
+        if interface_name and interface_name in API_INTERFACE_MAP:
+            interface_desc = API_INTERFACE_MAP[interface_name]
+            # Return "{Interface Description} Address" format
+            return f"{interface_desc} Address"
+        
+        # Check interface map (interfaces can be used as destinations, but not gateway addresses)
         if val in API_INTERFACE_MAP:
             return API_INTERFACE_MAP[val]
         if val in API_NET_MAP:
