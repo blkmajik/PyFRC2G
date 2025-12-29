@@ -87,7 +87,7 @@ pip install .
 
 ```bash
 # Install dependencies
-pip install requests graphviz reportlab
+pip install -r requirements.txt
 
 # Use the script directly
 python pyfrc2g.py
