@@ -117,8 +117,8 @@ GATEWAY_TYPE = "opnsense"
 
 # OPNSense Configuration
 OPNS_BASE_URL = "https://opnsense.domain.lan"
-OPNS_SECRET = "YOUR_API_SECRET"
 OPNS_KEY = "YOUR_API_KEY"
+OPNS_SECRET = "YOUR_API_SECRET"
 
 # Option 1: Auto-detection (recommended)
 INTERFACES = []  # Leave empty for automatic detection

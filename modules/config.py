@@ -11,8 +11,8 @@ PFS_TOKEN = "<YOUR_PFSENSE_API_TOKEN>"
 
 # OPNSense Configuration
 OPNS_BASE_URL = "https://<OPNS_ADDRESS>"
-OPNS_SECRET = "<YOUR_OPNSENSE_API_SECRET>"
 OPNS_KEY = "<YOUR_OPNSENSE_API_KEY>"
+OPNS_SECRET = "<YOUR_OPNSENSE_API_SECRET>"
 INTERFACES = []  # Auto-detect if empty, e.g., ["wan", "lan", "opt1", "opt2"]
 
 # Common Configuration
